@@ -122,15 +122,17 @@ Client changes
   hidden text. So does `restoreSelection` in `CodeChatEditor.mts` after a
   re-translation, which can add a marker to a block made in the Client.
 
-Known deviations
-----------------
+Limitations
+-----------
 
 For a block comment whose text starts on the line after the opening
-delimiter (`/*⏎`), the generic lexer (every language but C, C++ and Python)
-drops that newline, so the markers in it are one line early, and each such
-comment moves every later marker in the file one more line early. The
-fragment gutter numbers have the same offset; fixing the lexer is out of
-scope.
+delimiter (`/*⏎`), the generic lexer (every language but C, C++ and Python,
+which use pest parsers) drops that newline: `source_lexer` in `lexer.rs`
+removes the first character after the opening delimiter, a space or a
+newline, so the doc block has one line less than the comment takes in the
+file. The markers in it are one line early, and each such comment moves
+every later marker in the file one more line early. The fragment gutter
+numbers have the same offset; fixing the lexer is out of scope.
 
 TinyMCE's Find and Replace searches the text of hidden markers: a phrase
 which spans two lines isn't found, and a search for a number can find a
